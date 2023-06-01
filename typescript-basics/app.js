@@ -22,5 +22,8 @@ function generateErr(message, code) {
         message: message,
         errorCode: code
     };
+    //infinite loops also never return anything
+    //while(true) {}
 }
+//this function never returns anything and will crash script unless used with try/catch
 generateErr("uh oh spaghettios!", 500);
