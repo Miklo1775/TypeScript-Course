@@ -9,7 +9,9 @@ add = (n1: number, n2: number) => {
 };
 
 interface Named {
-  readonly name: string;
+  readonly name?: string;
+  outputName?: string; //optional property
+  //you can have optional properties in interfaces but also make it not optional in the class itself or you can have the property optional in both the interface and the class
 }
 
 //an interface describes the structure of an object
@@ -24,20 +26,26 @@ interface Greetable extends Named {
 
 //you can implement multiple interfaces seperated by a comma
 class Person implements Greetable {
-  name: string;
+  name?: string; //we cnan also add optional properties on the class
   age = 30;
-  constructor(name: string) {
-    this.name = name;
+  constructor(name?: string) {
+    if (name) {
+      this.name = name;
+    }
   }
 
   greet(phrase: string) {
-    console.log(phrase + " " + this.name);
+    if (this.name) {
+      console.log(phrase + " " + this.name);
+    } else {
+      console.log("Howdy partna");
+    }
   }
 }
 
 let user1: Greetable;
 
-user1 = new Person("Vic");
+user1 = new Person();
 
 user1.greet("Hi");
 // user1.name = "victor";
