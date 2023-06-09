@@ -52,3 +52,7 @@ user1 = new Person();
 user1.greet("Hi");
 // user1.name = "victor";
 console.log(user1);
+
+// Wrap Up
+
+//interfaces help bring your idea on how an object should be structured to your code. Types and interfaces CAN be used interchangeable a lot of the times but it is more common to use interfaces. Interfaces are used to check code during compilation but that is it. JS doesnt have a translation for interfaces.
