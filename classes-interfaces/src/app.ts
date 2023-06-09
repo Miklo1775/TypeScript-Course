@@ -1,4 +1,6 @@
 //if we want to use abstract methods, we need to set the class as abstract. Now all inherited classes would need to implement the method or else will throw an error.
+//abstract classes are useful for when you dont want to implement the method in the base class, but leave everything up to the inherited classes. and they HAVE to implement the method.
+//another important thing is that abstract classes CANT be instantiated.
 abstract class Department {
   static fiscalYear = 2023;
   // private id: string;
@@ -55,6 +57,7 @@ class ITDepartment extends Department {
 
 class AccountingDepartment extends Department {
   private lastReport: string;
+  private static instance: AccountingDepartment;
 
   //getters need to return something
   //you can access this like a property and not a method.
@@ -74,10 +77,18 @@ class AccountingDepartment extends Department {
     this.addReport(value);
   }
 
-  constructor(id: string, private reports: string[]) {
+  private constructor(id: string, private reports: string[]) {
     super(id, "Accounting");
     this.reports = [];
     this.lastReport = reports[0];
+  }
+
+  static getInstance() {
+    if (this.instance) {
+      return this.instance;
+    }
+    this.instance = new AccountingDepartment("Accounting", []);
+    return this.instance;
   }
 
   describe() {
@@ -120,7 +131,13 @@ vetServices.describe();
 // console.log(vetServices);
 
 //here i realized i can use an empty array since i dont have any reports at thet moment to create the instance of AccountingDepartment
-const vetAccounting = new AccountingDepartment("accounts", []);
+// const vetAccounting = new AccountingDepartment("accounts", []);
+
+//a common pattern in OOP is using singletons. Say we have multiple IT departments but only one accounting department and we want to ensure that we can only have one accountng department.
+//we set the constructor to private and create a new static property for the instance with a type of the class...in this case AccountingDepartment.
+//Afterwards, we then create our own method to either get the instance inside of the class or create a new instance inside of it. we then can get that instance by calling the method we created. Here it is called getInstance and we save it to a variable.
+//If you call the method again and save it into a different variable, its still going to be the same instance as before.
+const vetAccounting = AccountingDepartment.getInstance();
 
 //below is how we use the setter, it can also be used as an alternative to the addReport method
 vetAccounting.mostRecentReport = "Latest Report";
