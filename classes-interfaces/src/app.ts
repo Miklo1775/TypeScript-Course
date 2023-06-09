@@ -1,11 +1,12 @@
-class Department {
+//if we want to use abstract methods, we need to set the class as abstract. Now all inherited classes would need to implement the method or else will throw an error.
+abstract class Department {
   static fiscalYear = 2023;
   // private id: string;
   // private name: string;
   // we can use the private keyword to ensure that employee arrays are only available within the class
   protected employees: string[] = [];
 
-  constructor(private readonly id: string, public name: string) {
+  constructor(protected readonly id: string, public name: string) {
     // this.id = id;
     // this.name = n;
   }
@@ -16,9 +17,13 @@ class Department {
     };
   }
 
-  describe(this: Department) {
-    console.log(`Department ${this.id}: ${this.name}`);
-  }
+  // describe(this: Department) {
+  //   console.log(`Department ${this.id}: ${this.name}`);
+  // }
+
+  //we can use an empty method so that subclasses can ovveride the existing method. We would use it like this when we know that all the subclasses has access to this method but also that the implementation of the method will be entirely independent on that subclass.
+  //we use the abstract keyword followed by the method name(), semicolon and the return tyoe
+  abstract describe(this: Department): void;
 
   addEmployee(employee: string) {
     this.employees.push(employee);
@@ -41,6 +46,10 @@ class ITDepartment extends Department {
   constructor(id: string, admins: string[]) {
     super(id, "IT");
     this.admins = admins;
+  }
+
+  describe() {
+    console.log("IT Department - ID: " + this.id);
   }
 }
 
@@ -71,6 +80,10 @@ class AccountingDepartment extends Department {
     this.lastReport = reports[0];
   }
 
+  describe() {
+    console.log("Accounting Department - ID: " + this.id);
+  }
+
   addEmployee(name: string) {
     if (name === "Me") {
       return;
@@ -98,9 +111,9 @@ vetServices.addEmployee("You");
 
 // vetServices.employees[2] = "not you";
 
-vetServices.describe();
 vetServices.name = "IT VETS";
-vetServices.printEmployeeInfo();
+// vetServices.printEmployeeInfo();
+vetServices.describe();
 // const accountingCopy = { name: "s", describe: vetServices.describe };
 
 // accountingCopy.describe();
@@ -118,8 +131,9 @@ vetAccounting.addReport("This is a dummy report"); //and here i can add the repo
 
 vetAccounting.addEmployee("Me");
 vetAccounting.addEmployee("Mrvester");
-vetAccounting.printEmployeeInfo();
-vetAccounting.printReports();
+// vetAccounting.printEmployeeInfo();
+// vetAccounting.printReports();
+vetAccounting.describe();
 vetAccounting.addReport("This is working");
 // console.log(vetAccounting.mostRecentReport);
 
