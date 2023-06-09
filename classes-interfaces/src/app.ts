@@ -1,3 +1,5 @@
+//interfaces are used during compilation to check code. JS doesnt have a translation for interfaces
+
 interface AddFn {
   (a: number, b: number): number;
 }
