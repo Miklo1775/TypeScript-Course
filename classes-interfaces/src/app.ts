@@ -1,8 +1,13 @@
+interface Named {
+  readonly name: string;
+}
+
 //an interface describes the structure of an object
 
-interface Greetable {
+//extending/combining interfaces
+//we can extend multiple interfaces as well. Just seperate the interfaces by a comma.
+interface Greetable extends Named {
   //readonly wont let you change the name property in this case wont change after initialization
-  readonly name: string;
 
   greet(phrase: string): void;
 }
