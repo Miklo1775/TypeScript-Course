@@ -1,21 +1,27 @@
 //an interface describes the structure of an object
 
-interface Person {
+interface Greetable {
   name: string;
-  age: number;
 
   greet(phrase: string): void;
 }
 
-let user1: Person;
-
-user1 = {
-  name: "Vic",
-  age: 28,
+//you can implement multiple interfaces seperated by a comma
+class Person implements Greetable {
+  name: string;
+  age = 30;
+  constructor(name: string) {
+    this.name = name;
+  }
 
   greet(phrase: string) {
     console.log(phrase + " " + this.name);
-  },
-};
+  }
+}
+
+let user1: Greetable;
+
+user1 = new Person("Vic");
 
 user1.greet("Hi");
+console.log(user1);
