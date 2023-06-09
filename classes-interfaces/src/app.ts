@@ -1,7 +1,8 @@
 //an interface describes the structure of an object
 
 interface Greetable {
-  name: string;
+  //readonly wont let you change the name property in this case wont change after initialization
+  readonly name: string;
 
   greet(phrase: string): void;
 }
@@ -24,4 +25,5 @@ let user1: Greetable;
 user1 = new Person("Vic");
 
 user1.greet("Hi");
+// user1.name = "victor";
 console.log(user1);
