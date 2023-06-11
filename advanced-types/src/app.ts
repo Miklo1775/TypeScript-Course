@@ -1,4 +1,4 @@
-//Type Gaurds
+//Discriminated Unions
 
 type Admin = {
   name: string;
@@ -23,8 +23,6 @@ type Numeric = number | boolean;
 type Universal = Combinable & Numeric;
 
 function add(a: Combinable, b: Combinable) {
-  //below is whats known as a tyoe guard. It allows us to use the flexibility of union tpes.
-  //if any of the inputs is a string, it will enter the if statement and concatenate them. Otherwise if it receives both numbers, it wont enter the if statement and will return the sum of a and b
   if (typeof a === "string" || typeof b === "string") {
     return a.toString() + b.toString();
   }
@@ -36,8 +34,6 @@ type UnknownEmployee = Employee | Admin;
 const printEmployeeInfo = (employee: UnknownEmployee) => {
   console.log("Name: " + employee.name);
 
-  //the below type guard checks if the privilege property exists on the employee object. SO we are just checking if a property exists on the object and if it does, we'd enter the appropriate if statements.
-  //if the property doesn't exist, we dont do anything
   if ("privilege" in employee) {
     console.log("Privilege: " + employee.privilege);
   }
@@ -72,7 +68,7 @@ const v2 = new Truck();
 
 const useVehicle = (vehicle: Vehicle) => {
   vehicle.drive();
-  //instanceof is a vanilla JS operator. Below it checks if vehicle is basd off the Truck constructor
+
   if (vehicle instanceof Truck) {
     vehicle.loadCargo(1000);
   }
@@ -85,4 +81,49 @@ const useVehicle = (vehicle: Vehicle) => {
 useVehicle(v1);
 useVehicle(v2);
 
-//in summary, for types we can use typeof in guard checks, for objects we can use 'in', and for instances we can use instanceof
+interface Bird {
+  type: "bird"; //this is a literal type.
+  flyingSpeed: number;
+}
+
+interface Horse {
+  type: "horse";
+  runningSpeed: number;
+}
+
+type Animal = Bird | Horse;
+
+// const moveAnimal = (animal: Animal) => {
+
+//     //the below code will definitely work but what if we get more animals?????
+
+//   if ("flyingSpeed" in animal) {
+//     console.log("Moving with speed: " + animal.flyingSpeed);
+//   }
+
+//   if ("runningSpeed" in animal) {
+//     console.log("Moving with speed: " + animal.runningSpeed);
+//   }
+// };
+
+const moveAnimal = (animal: Animal) => {
+  //so each animal will have a type property of either bird or horse in this scenario.
+  //we then use an switch statement to check the animals type. Outside of the switch, we initialize a variable named speed to set the speed depending on the animal type.
+  //Finally we then console.log a message with the appropriate speed
+  let speed;
+
+  switch (animal.type) {
+    case "bird":
+      speed = animal.flyingSpeed;
+      break;
+    case "horse":
+      speed = animal.runningSpeed;
+  }
+
+  console.log("Moving at speed: " + speed);
+};
+
+moveAnimal({ type: "bird", flyingSpeed: 100 });
+moveAnimal({ type: "horse", runningSpeed: 200 });
+
+//in summary, we know that interfaces force us to use the properties and types. TypeScript also knows that in the example above, there will only ever be 2 different cases unless we add more to them. Instead of checking if a certain property exists or if there is an instance, we use types since we already know that every animal has to have a type
