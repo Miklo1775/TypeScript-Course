@@ -1,16 +1,25 @@
-//Built In Generics
-const names: Array<string> = ["chichi", "cheddar"]; //this syntax is exactly the same as string[]
-names[0].split(" ");
+//Creating a Generic Function
 
-//heres something i learned, a promise has a type. Below, the type is Promise is the type and we know that promise will return a string so we can set the the type of that Promise to a string.
-//This is useful because if we know what type of data we are working with, we'll have access to the methods such as string methods.
-//being able to set the type gives us type safety and allows TS to warn us if we make an error.
-const promise: Promise<string> = new Promise((resolve, reject) => {
-  setTimeout(() => {
-    resolve("This is done!");
-  }, 2000);
-});
+//so another difference from Maxs course and typescript 4.5...
+//Below i needed to add <T extends {}, U> whereas Max only had to do <T, U>.
+//Looks lijke that change was implemented after TypeScript 3.5.
+//The change was that generic type parameters are implicity set to type unknown instead of object type {}
 
-promise.then((data) => {
-  data.split(" ");
-});
+//Anyways, what we are saying below is that we dont know what the types of the object will be, but we do know that thet types of the 2 different parameters will be different.
+//Now, the types arent set when we create the function, but are dynamically set when we invoke the function with the arguments.
+function mergeObj<T extends {}, U>(a: T, b: U) {
+  return Object.assign(a, b);
+}
+
+// console.log(mergeObj({ name: "victor" }, { age: 28 }));
+
+// const merged = mergeObj({ name: "victor" }, { age: 28 });
+
+//we can also tell TS what the types for T and U are such as below
+const merged = mergeObj<{ name: string; hobbies: string[] }, { age: number }>(
+  { name: "victor", hobbies: ["Learning"] },
+  { age: 28 }
+);
+
+//we cant access the properties because TS doesn't know if they exist or not.
+console.log(merged.name);
