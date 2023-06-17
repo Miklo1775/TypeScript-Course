@@ -1,2 +1,0 @@
-//Generics vs Union Tyopes
-//
