@@ -28,4 +28,4 @@
 
 // const person1 = new Person();
 
-console.log(person1);
+// console.log(person1);
