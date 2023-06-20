@@ -309,14 +309,14 @@ class ProjectInput extends Base<HTMLDivElement, HTMLFormElement> {
 
 const projIn = new ProjectInput();
 
-class ProjectList extends Base<HTMLDivElement, HTMLElement> {
+class ProjectList extends Base<HTMLDivElement, HTMLElement> implements DragTarget {
   // templateEl: HTMLTemplateElement;
   // hostEl: HTMLDivElement;
   // element: HTMLElement;
   assignedProjects: Project[];
 
   constructor(private type: "active" | "finished") {
-    super("project-list", "app", false, `${type} - projects`);
+    super("project-list", "app", false, `${type}-projects`);
     // this.templateEl = <HTMLTemplateElement>document.getElementById("project-list")!;
     // this.hostEl = <HTMLDivElement>document.getElementById("app")!;
     this.assignedProjects = [];
@@ -327,6 +327,20 @@ class ProjectList extends Base<HTMLDivElement, HTMLElement> {
 
     this.configure();
     this.renderContent();
+  }
+
+  @AutoBind
+  dragOverHandler(_: DragEvent) {
+    const listEl = <HTMLUListElement>this.element.querySelector("ul")!;
+    listEl.classList.add("droppable");
+  }
+
+  dropHandler(_: DragEvent) {}
+
+  @AutoBind
+  dragLeaveHandler(_: DragEvent) {
+    const listEl = <HTMLUListElement>this.element.querySelector("ul");
+    listEl.classList.remove("droppable");
   }
 
   private renderProjects() {
@@ -344,6 +358,10 @@ class ProjectList extends Base<HTMLDivElement, HTMLElement> {
   }
 
   configure() {
+    this.element.addEventListener("dragover", this.dragOverHandler);
+    this.element.addEventListener("dragleave", this.dragLeaveHandler);
+    this.element.addEventListener("drop", this.dropHandler);
+
     projectState.addListener((projects: Project[]) => {
       const relProjs = projects.filter((project) => {
         if (this.type === "active") {
