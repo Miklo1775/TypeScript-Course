@@ -167,6 +167,18 @@ class ProjectState extends StateBase<Project> {
   addProject(title: string, description: string, numPeeps: number) {
     const newProject = new Project(Math.random().toString(), title, description, numPeeps, Status.Active);
     this.projects.push(newProject);
+    this.updateListeners();
+  }
+
+  moveProject(projId: string, newStatus: Status) {
+    const project = this.projects.find((project) => project.id === projId);
+    if (project && project.projectStatus !== newStatus) {
+      project.projectStatus = newStatus;
+      this.updateListeners();
+    }
+  }
+
+  private updateListeners() {
     for (const listener of this.listeners) {
       listener(this.projects.slice());
     }
@@ -339,8 +351,10 @@ class ProjectList extends Base<HTMLDivElement, HTMLElement> implements DragTarge
     }
   }
 
+  @AutoBind
   dropHandler(event: DragEvent) {
-    console.log(event);
+    const projId = event.dataTransfer!.getData("text/plain");
+    projectState.moveProject(projId, this.type === "active" ? Status.Active : Status.Finished);
   }
 
   @AutoBind
