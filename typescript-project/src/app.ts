@@ -43,6 +43,19 @@
 //   return isValid;
 // }
 
+//Drag and Drop interfaces
+
+interface Draggable {
+  dragStartHandler(event: DragEvent): void;
+  dragEndHandler(event: DragEvent): void;
+}
+
+interface DragTarget {
+  dragOverHandler(event: DragEvent): void;
+  dropHandler(event: DragEvent): void;
+  dragLeaveHandler(event: DragEvent): void;
+}
+
 //Base Class
 abstract class Base<T extends HTMLElement, U extends HTMLElement> {
   templateEl: HTMLTemplateElement;
@@ -68,7 +81,7 @@ abstract class Base<T extends HTMLElement, U extends HTMLElement> {
   abstract renderContent(): void;
 }
 
-class ProjectItem extends Base<HTMLUListElement, HTMLLIElement> {
+class ProjectItem extends Base<HTMLUListElement, HTMLLIElement> implements Draggable {
   private project: Project;
 
   get persons() {
@@ -86,7 +99,19 @@ class ProjectItem extends Base<HTMLUListElement, HTMLLIElement> {
     this.renderContent();
   }
 
-  configure() {}
+  @AutoBind
+  dragStartHandler(event: DragEvent) {
+    console.log(event);
+  }
+  @AutoBind
+  dragEndHandler(_: DragEvent) {
+    console.log("Drag has ended");
+  }
+
+  configure() {
+    this.element.addEventListener("dragstart", this.dragStartHandler);
+    this.element.addEventListener("dragstart", this.dragEndHandler);
+  }
   renderContent() {
     this.element.querySelector("h2")!.textContent = this.project.title;
     this.element.querySelector("h3")!.textContent = this.persons + " assigned";
